@@ -6,7 +6,7 @@ Molly Hardy \
 - Beer Recommender
 - Data: [here](https://www.kaggle.com/nickhould/craft-cans) 
     - 5 features (too little?!) of 2,400 craft beers Kaggle link 
-- **MVP:** Build flask website for others to be able to select a beer they like then be provided 3 - 5 recommendations
+- **MVP:** Build website for others to be able to select a beer they like then be provided 3 - 5 recommendations
 
 ### Idea 2
 - Humpback Whale Identification 
