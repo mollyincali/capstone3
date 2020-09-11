@@ -1,24 +1,9 @@
-# Capstone3 Proposal
+# Capstone 3
 Molly Hardy \
-9/8/2020 
+9/10/2020 
 
-### Idea 1
-- Beer Recommender
-- Data: [here](https://www.kaggle.com/nickhould/craft-cans) 
-    - 5 features (too little?!) of 2,400 craft beers Kaggle link 
-- **MVP:** Build website for others to be able to select a beer they like then be provided 3 - 5 recommendations
-
-### Idea 2
-- Bringing it back to my Instacart Data
-- Data: [here](https://www.kaggle.com/c/instacart-market-basket-analysis)
-    - Challenge: Continue to work on prediciting if a user will reorder, and also add on to this so I can recommend items (or even a full cart!) to a user. I'll be faced with the same sparse data set, will that be too big of a challenge for me to tackle in one week?
-- **MVP:** Recommend items to specific users based on previous orders
-
-### Idea 3
-- Animal Faces
-- Data: [here](https://www.kaggle.com/andrewmvd/animal-faces)
-    - 16k+ images of Dog, Cat and Wildlife faces
-- **MVP:** Correctly classify image as Dog, Cat, or Wildlife
-
-## **ALSO!** 
-I love this [Google Conceptual Captions Competition](https://ai.google.com/research/ConceptualCaptions) Could I even do this within a week? Ideas, thoughts? Here is a smaller set from [Kaggle](https://www.kaggle.com/hsankesara/flickr-image-dataset)
+## *"WTF: What's That Face?"*
+- Dataset: [Animal Faces](https://www.kaggle.com/andrewmvd/animal-faces)
+- 16k+ images of Dog, Cat and Wildlife faces
+- **MVP:** Given an image of an animals face, can I create a model that will classify the animal?
+- **MVP:** Do some unsupervised learning on the "Wildlife" images and see if I can classify those since they do not have labels
