@@ -1,45 +1,62 @@
 '''
 cnn model for image classification
 '''
-from keras.preprocessing.image import ImageDataGenerator
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.set()
+
+from keras.layers import Activation, Convolution2D, Dense, Dropout, Flatten, MaxPooling2D
 from keras.models import Sequential
-from keras.layers import Conv2D, MaxPooling2D
-from keras.layers import Activation, Dropout, Flatten, Dense
-from keras import backend as K
+from keras.applications.xception import preprocess_input 
+from keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.callbacks import TensorBoard
+from keras.models import load_model
+from keras.callbacks import ModelCheckpoint
+
+def create_model():
+    """ final cnn model """
+
+    return model
 
 def data_gen():
-    img_width, img_height = 150, 150
+    """ final data generator """
+    mod = create_model()
 
-    data_dir = 'UPDATE'
-    validation_data_dir = 'UPDATE'
-    nb_train_samples = 2000
-    nb_validation_samples = 800
-    epochs = 50
-    batch_size = 16
+    mod.compile(optimizer='adam', 
+                loss ='categorical_crossentropy', 
+                metrics ='accuracy')
     
-    train_datagen = ImageDataGenerator(
-        rescale = 1. / 255,
-        shear_range = 0.2,
-        zoom_range = 0.2,
-        horizontal_flip = True)
+    history = mod.fit(train_generator, 
+            validation_data=validation_generator,
+            epochs=epochs)  
 
-    test_datagen = ImageDataGenerator(rescale = 1. / 255)
+    return history
 
-    train_generator = train_datagen.flow_from_directory(
-        data_dir,
-        target_size=(img_width, img_height),
-        batch_size=batch_size,
-        class_mode='categorical')
+def graph_model(history, epochs):
+    """ code to run accuracy on test and validation """
+    epochs = 10
+    acc = history.history['accuracy'] 
+    val_acc = history.history['val_accuracy'] 
+    loss=history.history['loss'] 
+    val_loss=history.history['val_loss'] 
+    epochs_range = range(epochs)
 
-    validation_generator = test_datagen.flow_from_directory(
-        validation_data_dir,
-        target_size=(img_width, img_height),
-        batch_size = batch_size,
-        class_mode = 'categorical')
-    
-    model.fit_generator(
-        train_generator,
-        steps_per_epoch = nb_train_samples // batch_size,
-        epochs = epochs,
-        validation_data = validation_generator,
-        validation_steps = nb_validation_samples // batch_size)
+    plt.figure(figsize=(8, 8))
+    plt.subplot(1, 2, 1)
+    plt.plot(epochs_range, acc, label='Training Accuracy')
+    plt.plot(epochs_range, val_acc, label='Validation Accuracy')
+    plt.legend(loc='lower right')
+    plt.title('Training and Validation Accuracy')
+
+    plt.subplot(1, 2, 2)
+    plt.plot(epochs_range, loss, label='Training Loss')
+    plt.plot(epochs_range, val_loss, label='Validation Loss')
+    plt.legend(loc='upper right')
+    plt.title('Training and Validation Loss')
+    plt.show();
+
+if __name__ == "__main__":
+    pass
+
