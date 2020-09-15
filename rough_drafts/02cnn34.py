@@ -1,6 +1,6 @@
 '''
 final val_acc =  0.3462 acc = 0.3537
-code copied from 
+code credit 
 https://www.tensorflow.org/tutorials/images/classification#import_tensorflow_and_other_libraries
 '''
 

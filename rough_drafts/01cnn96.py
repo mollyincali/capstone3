@@ -1,9 +1,7 @@
 ''' 
 final val_acc = 0.9666 acc = 0.9555
-rough drafts of cnn model #1
-not meant for running meant for notes 
+code credit - lecture + solutions
 '''
-
 import numpy as np
 import pandas as pd
 import seaborn as sns

@@ -62,6 +62,8 @@ if __name__ == "__main__":
     #tiger change color
     animal_color_visual('../animals/train/wild/flickr_wild_001127.jpg', 'tiger')
 
+
+
 #---- GRAPHING CODE TO SAVE 
     #graphs 9 images - not all on 1?!
     # plt.figure(figsize=(10, 10))

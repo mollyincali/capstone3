@@ -17,26 +17,19 @@ from keras.callbacks import ModelCheckpoint
 
 def create_model():
     """ final cnn model """
-
-    return model
+    pass
 
 def data_gen():
     """ final data generator """
-    mod = create_model()
-
-    mod.compile(optimizer='adam', 
-                loss ='categorical_crossentropy', 
-                metrics ='accuracy')
-    
-    history = mod.fit(train_generator, 
-            validation_data=validation_generator,
-            epochs=epochs)  
-
-    return history
+    pass
 
 def graph_model(history, epochs):
     """ code to run accuracy on test and validation """
+    pink = '#CC9B89'
+    blue = '#23423F'
+    gold = '#B68D34'
     epochs = 10
+
     acc = history.history['accuracy'] 
     val_acc = history.history['val_accuracy'] 
     loss=history.history['loss'] 
@@ -45,14 +38,18 @@ def graph_model(history, epochs):
 
     plt.figure(figsize=(8, 8))
     plt.subplot(1, 2, 1)
-    plt.plot(epochs_range, acc, label='Training Accuracy')
-    plt.plot(epochs_range, val_acc, label='Validation Accuracy')
+    plt.plot(epochs_range, acc, label='Training Accuracy',
+            linewidth = 3, color = blue)
+    plt.plot(epochs_range, val_acc, label='Validation Accuracy',
+            linewidth = 3, color = pink)
     plt.legend(loc='lower right')
     plt.title('Training and Validation Accuracy')
 
     plt.subplot(1, 2, 2)
-    plt.plot(epochs_range, loss, label='Training Loss')
-    plt.plot(epochs_range, val_loss, label='Validation Loss')
+    plt.plot(epochs_range, loss, label='Training Loss',
+            linewidth = 3, color = blue)
+    plt.plot(epochs_range, val_loss, label='Validation Loss',
+            linewidth = 3, color = pink)
     plt.legend(loc='upper right')
     plt.title('Training and Validation Loss')
     plt.show();
