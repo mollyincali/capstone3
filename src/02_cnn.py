@@ -43,6 +43,7 @@ def graph_model(history, epochs):
     plt.plot(epochs_range, val_acc, label='Validation Accuracy',
             linewidth = 3, color = pink)
     plt.legend(loc='lower right')
+    plt.ylim((0.70,1))
     plt.title('Training and Validation Accuracy')
 
     plt.subplot(1, 2, 2)
