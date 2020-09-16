@@ -22,8 +22,8 @@ from keras.layers import Conv2D, MaxPooling2D, UpSampling2D, Activation, Dense, 
 
 if __name__ == "__main__":
     img_width, img_height = 150, 150
-    train_data_dir = '../animals/train/wild'
-    val_data_dir = '../animals/val/wild'
+    train_data_dir = '../animals/train/w.folder'
+    val_data_dir = '../animals/val/w.folder'
     batch_size = 32
 
     train_datagen = ImageDataGenerator(
@@ -47,17 +47,37 @@ if __name__ == "__main__":
         batch_size = batch_size,
         class_mode = 'input')
 
+    model = Sequential()
+    #1st convolution layer
+    model.add(Conv2D(16, (3, 3) 
+        , padding='same', input_shape=(img_width,img_height,1)))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2,2), padding='same'))
+    #2nd convolution layer
+    model.add(Conv2D(2,(3, 3), padding='same')) 
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2,2), padding='same'))
 
+    #-------------------------
 
+    #3rd convolution layer
+    model.add(Conv2D(2,(3, 3), padding='same')) 
+    model.add(Activation('relu'))
+    model.add(UpSampling2D((2, 2)))
+    #4rd convolution layer
+    model.add(Conv2D(16,(3, 3), padding='same'))
+    model.add(Activation('relu'))
+    model.add(UpSampling2D((2, 2)))
 
+    #-------------------------
 
+    model.add(Conv2D(1,(3, 3), padding='same'))
+    model.add(Activation('sigmoid'))
 
+    model.summary()
 
+    model.compile(optimizer='adam', loss='mse')
 
-
-
-
-# img = imread('../animals/train/wild/flickr_wild_000005.jpg')
-# print(type(img))
-# plt.imshow(img)
-# plt.show();
+    model.fit(train_generator, 
+            epochs=3,
+            validation_data=val_generator)
