@@ -1,6 +1,7 @@
 ''' 
-auto encoders for unsupervised learning on wild folder
-code credit
+
+setting up autoencoder for kmeans on wild folder
+trying with flow from dir
 https://github.com/serengil/tensorflow-101/blob/master/python/ConvolutionalAutoencoder.ipynb
 '''
 import numpy as np
@@ -64,6 +65,7 @@ if __name__ == "__main__":
     model.add(Conv2D(2,(3, 3), padding='same')) 
     model.add(Activation('relu'))
     model.add(UpSampling2D((2, 2)))
+    
     #4rd convolution layer
     model.add(Conv2D(16,(3, 3), padding='same'))
     model.add(Activation('relu'))
