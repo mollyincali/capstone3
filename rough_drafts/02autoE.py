@@ -17,9 +17,7 @@ from skimage import io
 import tensorflow as tf
 import keras
 from tensorflow.keras import layers
-from keras.applications.xception import preprocess_input 
 from keras.preprocessing.image import ImageDataGenerator
-from keras.datasets import mnist
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D, UpSampling2D, Activation, Dense, Dropout, Flatten

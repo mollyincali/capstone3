@@ -1,5 +1,5 @@
 ''' 
-
+ERROR with flow from dir
 setting up autoencoder for kmeans on wild folder
 trying with flow from dir
 https://github.com/serengil/tensorflow-101/blob/master/python/ConvolutionalAutoencoder.ipynb
@@ -23,9 +23,9 @@ from keras.layers import Conv2D, MaxPooling2D, UpSampling2D, Activation, Dense, 
 
 if __name__ == "__main__":
     img_width, img_height = 150, 150
-    train_data_dir = '../animals/train/w.folder'
-    val_data_dir = '../animals/val/w.folder'
-    batch_size = 32
+    train_data_dir = '../animals/train/wild'
+    val_data_dir = '../animals/val/wild'
+    batch_size = 4
 
     train_datagen = ImageDataGenerator(
         train_data_dir,
@@ -49,6 +49,7 @@ if __name__ == "__main__":
         class_mode = 'input')
 
     model = Sequential()
+
     #1st convolution layer
     model.add(Conv2D(16, (3, 3) 
         , padding='same', input_shape=(img_width,img_height,1)))
