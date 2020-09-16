@@ -1,10 +1,11 @@
 ''' 
-final val_acc = 
+final loss: 0.1428 - accuracy: 0.9499 - val_loss: 0.1806 - val_accuracy: 0.9407
 UPDATING 06CNN
 code credit: lecture + solutions
 - adding model checkpoint
-- cranking up epochs
-- early stop changed to patience 2
+- early stop changed to patience 2 went to 100 epochs stopped at 3
+- dropped early stop and ran epochs to 20
+- went back to learning rate of 0.001
 '''
 import numpy as np
 import pandas as pd
@@ -71,28 +72,25 @@ def run_model(epoch):
 
     mod = create_model((150, 150, 3), 3)
 
-    low_adam = tf.keras.optimizers.Adam(learning_rate=0.0001)
-
-    mod.compile(optimizer=low_adam, 
+    mod.compile(optimizer='adam', 
                 loss ='categorical_crossentropy', 
                 metrics ='accuracy')
 
-    es = EarlyStopping(monitor='val_loss', 
-                    patience=2)
+    # es = EarlyStopping(monitor='val_loss', 
+    #                 patience=2)
 
-    model_checkpoint = tf.keras.callbacks.ModelCheckpoint(
-        filepath = '../best_mod',
+    checkpoint = tf.keras.callbacks.ModelCheckpoint(
+        filepath = 'best_mod.hdf5',
         save_weights_only = True,
         monitor = 'val_acc',
-        mode = 'max',
-        save_best_only = True)
+        mode = 'max')
 
     history = mod.fit(train_generator,
         validation_data = val_generator,
         epochs = epoch,
-        callbacks = [es, model_checkpoint])
+        callbacks = [checkpoint])
 
     return history
 
 if __name__ == "__main__":
-    history = run_model(100)
+    history = run_model(20)

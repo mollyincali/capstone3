@@ -28,7 +28,7 @@ def graph_model(history, epochs):
     pink = '#CC9B89'
     blue = '#23423F'
     gold = '#B68D34'
-    epochs = 10
+    epochs = 20
 
     acc = history.history['accuracy'] 
     val_acc = history.history['val_accuracy'] 
@@ -39,18 +39,18 @@ def graph_model(history, epochs):
     plt.figure(figsize=(8, 8))
     plt.subplot(1, 2, 1)
     plt.plot(epochs_range, acc, label='Training Accuracy',
-            linewidth = 3, color = blue)
+            linewidth = 2, color = blue)
     plt.plot(epochs_range, val_acc, label='Validation Accuracy',
-            linewidth = 3, color = pink)
+            linewidth = 2, color = pink)
     plt.legend(loc='lower right')
     plt.ylim((0.70,1))
     plt.title('Training and Validation Accuracy')
 
     plt.subplot(1, 2, 2)
     plt.plot(epochs_range, loss, label='Training Loss',
-            linewidth = 3, color = blue)
+            linewidth = 2, color = blue)
     plt.plot(epochs_range, val_loss, label='Validation Loss',
-            linewidth = 3, color = pink)
+            linewidth = 2, color = pink)
     plt.legend(loc='upper right')
     plt.title('Training and Validation Loss')
     plt.show();
