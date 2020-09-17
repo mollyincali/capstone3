@@ -1,5 +1,5 @@
 ''' 
-final loss: 0.1428 - accuracy: 0.9499 - val_loss: 0.1806 - val_accuracy: 0.9407
+final loss: 
 UPDATING 06CNN
 code credit: lecture + solutions
 - adding model checkpoint

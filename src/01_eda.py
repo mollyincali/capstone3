@@ -34,30 +34,10 @@ def show_img(path):
     plt.show();
     return animal
 
-def pca_work():
-    scaler = StandardScaler(copy=True, with_mean=True, with_std=True)
-    pca_scaled = scaler.fit_transform(pca_work)
-    pca = PCA(n_components=6)
-    pca.fit(pca_scaled)
-    X_pca = pca.transform(pca_scaled)
-
-    print("\nData after PCA into 6 components")
-    print("PC1\tPC2\tPC3\tPC4\tPC5\tPC6")
-    for i in range(6):
-        print(f'{X_pca[i,0]:0.1f}, \t{X_pca[i,1]:0.1f}, \t{X_pca[i,2]:0.1f}, 
-                \t{X_pca[i,3]:0.1f}, \t{X_pca[i,4]:0.1f}, \t{X_pca[i,5]:0.1f}')
-
-    #--- looking for ideal PCA number
-    ratio = []
-    for num in range(6, 134):
-        pca = PCA(n_components=num)
-        pca.fit(pca_scaled)
-        X_pca = pca.transform(pca_scaled)
-        ratio.append([num, np.sum(pca.explained_variance_ratio_)])
     
-
 if __name__ == "__main__":
-    dog = show_img('../animals/train/dog/flickr_dog_000051.jpg') #images 512,512,3 dtype unit8
+    #images 512,512,3 dtype unit8
+    dog = show_img('../animals/train/dog/flickr_dog_000051.jpg') 
 
     #tiger change color
     animal_color_visual('../animals/train/wild/flickr_wild_001127.jpg', 'tiger')
