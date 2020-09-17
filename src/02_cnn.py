@@ -119,6 +119,16 @@ if __name__ == "__main__":
 
 
 '''
+finding out which ones wrong
+pred = cnn.predict(cnn.val_generator)
+real = cnn.val_generator.labels 
+df = pd.DataFrame(data = pred)
+df['real'] = real
+file = cnn.val_generator.filenames
+df['file_name'] = file
+'''
+
+'''
 def graph_model(history, epochs):
     """ code to run accuracy on test and validation """
     pink = '#CC9B89'
