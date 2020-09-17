@@ -85,12 +85,12 @@ class Autoencoder():
         self.test = val_generator
         return self.train, self.test
 
-    def fit(self, batch_size, epochs):
+    def fit(self, train, test, batch_size, epochs):
         ''' this method will fit the model using train & test data '''
-        self.model.fit(self.train, 
+        self.model.fit(train, 
                     epochs = epochs,
                     batch_size = batch_size,
-                    validation_data = self.test)
+                    validation_data = test)
         self.history = self.model.history.history
 
     def get_rmse(self, test):
@@ -140,9 +140,20 @@ class Autoencoder():
         pass
 
 if __name__ == "__main__":
-    cnn = Autoencoder()
-    cnn.build_autoencoder()
-    train, test = cnn.img_gen()
-    cnn.fit(train, test, 32, 1)
+        cnn = Autoencoder()
+        cnn.build_autoencoder()
+        train, test = cnn.img_gen()
+        cnn.fit(train, test, 32, 3)
 
-    
+        #create model of trained autoencoder up until flat layer
+        encoder = tf.keras.Sequential(cnn.model.layers[0:9]) 
+        #reduces images into 512 columns each img a row
+        flat_layers = encoder.predict(train) 
+
+        #kmeans
+        kmeans = KMeans(n_clusters = 10).fit(flat_layers)
+        k_labels = kmeans.labels_
+        
+        #4738 images
+        d = {'cluster': k_labels, 'img_num': np.arange(4738)}
+        df = pd.DataFrame(data=d)
