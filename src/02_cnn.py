@@ -11,6 +11,7 @@ from keras.layers import Activation, Convolution2D, Dense, Dropout, Flatten, Max
 from keras.models import Sequential
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import EarlyStopping
+import PIL 
 
 class CNN():
     def __init__(self, model=None):
@@ -115,18 +116,16 @@ if __name__ == "__main__":
     cnn = CNN()
     cnn.build_cnn((150,150,3),3) 
     cnn.create_img_gen((150,150),32)    
-    # cnn.fit_cnn(1)     
+    cnn.fit_cnn(1)     
 
-
-'''
-finding out which ones wrong
-pred = cnn.predict(cnn.val_generator)
-real = cnn.val_generator.labels 
-df = pd.DataFrame(data = pred)
-df['real'] = real
-file = cnn.val_generator.filenames
-df['file_name'] = file
-'''
+    #get images the model guessed incorrectly
+    x, y = next(cnn.val_generator)
+    difference = np.argmax(cnn.predict(x), axis = 1) != np.argmax(y, axis = 1)
+    diff = x[difference]
+    np.sum(diff)
+    for d in diff:
+        img = (d * 255).astype(np.uint8)
+        PIL.Image.fromarray(img).show();
 
 '''
 def graph_model(history, epochs):

@@ -17,6 +17,7 @@ from keras.models import Sequential
 from keras.preprocessing.image import ImageDataGenerator
 from keras import backend as K
 from sklearn.cluster import KMeans
+from skimage import io
 
 class Autoencoder():
     def __init__(self):
@@ -78,13 +79,14 @@ class Autoencoder():
                 train_data_dir,
                 target_size=(img_width, img_height),
                 batch_size=batch_size,
+                seed=3,
                 class_mode='input')
         
         val_generator = val_datagen.flow_from_directory(
                 val_data_dir,
                 target_size=(img_width, img_height),
                 batch_size = batch_size,
-                shuffle = False,
+                seed=3,
                 class_mode = 'input')
 
         self.train = train_generator
@@ -141,24 +143,29 @@ class Autoencoder():
         flat_values = encoder.predict(X)
         return flat_values
 
+def cluster_images(df):
+    for i in range(5):
+        group = df[df['cluster'] == i].copy()
+        plt.figure(figsize=(10, 10))
+        for idx, img in enumerate(group.sample(9).iloc[:,1]):
+            animal = io.imread(f'../animals/train/w.wild/{img}')
+            ax = plt.subplot(3, 3, idx + 1)
+            plt.imshow(animal)
+            plt.axis("off")
+        plt.show();
+
 if __name__ == "__main__":
         auto = Autoencoder()
         auto.build_autoencoder()
         train, test = auto.img_gen()
         auto.fit(train, test, 32, 3)
         flat_values = auto.get_flat_values(train)
-        
-'''
-        #kmeans
-        kmeans = KMeans(n_clusters = 5).fit(flat_layers)
+
+        kmeans = KMeans(n_clusters = 3).fit(flat_values)
         k_labels = kmeans.labels_
 
-        list_filpath = []
-        for filename in os.listdir('../animals/train/w.wild/wild'):
-                if filename != '.DS_Store':
-                        list_filpath.append(f'../animals/train/w.wild/wild/{filename}')
-        
-        #4738 images
-        d = {'cluster': k_labels, 'file_path': list_filpath}
+        d = {'cluster': k_labels, 'file_path': auto.train.filenames}
         df = pd.DataFrame(data=d)
-'''
+
+        cluster_images(df)
+        
