@@ -116,7 +116,7 @@ if __name__ == "__main__":
     cnn = CNN()
     cnn.build_cnn((150,150,3),3) 
     cnn.create_img_gen((150,150),32)    
-    cnn.fit_cnn(1)     
+    # cnn.fit_cnn(1)     
 
     #get images the model guessed incorrectly
     x, y = next(cnn.val_generator)
@@ -126,7 +126,6 @@ if __name__ == "__main__":
     for d in diff:
         img = (d * 255).astype(np.uint8)
         PIL.Image.fromarray(img).show();
-
 '''
 def graph_model(history, epochs):
     """ code to run accuracy on test and validation """
