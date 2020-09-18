@@ -5,6 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 sns.set()
 from skimage import io
+import PIL 
 
 def cluster_images(df):
     ''' show kmeans cluster of animals '''
@@ -40,7 +41,7 @@ def graph_model(history, epochs):
     pink = '#CC9B89'
     blue = '#23423F'
     # gold = '#B68D34'
-    epochs = epochs
+    epochs = 20
 
     acc = history.history['accuracy'] 
     val_acc = history.history['val_accuracy'] 
@@ -48,10 +49,10 @@ def graph_model(history, epochs):
     val_loss=history.history['val_loss'] 
     epochs_range = range(epochs)
 
-    if min(val_acc) < min(loss):
+    if min(val_acc) < min(acc):
         min_ = min(val_acc)
     else:
-        min_ = min(loss)
+        min_ = min(acc)
 
     plt.figure(figsize=(8, 8))
     plt.subplot(1, 2, 1)

@@ -12,9 +12,6 @@ from keras.models import Sequential, load_model
 from keras.preprocessing import image 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import EarlyStopping
-import PIL 
-import sys
-sys.setrecursionlimit(10000)
 
 class CNN():
     def __init__(self, model=None):
@@ -57,7 +54,7 @@ class CNN():
     def create_img_gen(self, img_size, batch_size):
         ''' create image generators
 
-        img_size: tuple
+        img_size: tuple (width, height)
         batch_size: float 
         
         output: train_generator, val_generator
@@ -67,7 +64,6 @@ class CNN():
         batch_size = batch_size
 
         train_datagen = ImageDataGenerator(
-            # train_data_dir,
             rescale = 1. / 255,
             shear_range = 0.2,
             zoom_range = 0.2,
@@ -92,7 +88,6 @@ class CNN():
 
     def fit_cnn(self, epoch):
         ''' fit the cnn model with modelcheckpoint as a callback '''
-
         checkpoint = tf.keras.callbacks.ModelCheckpoint(
             filepath = 'best_mod3.hdf5',
             save_best_only = True,
@@ -107,8 +102,7 @@ class CNN():
         self.history = self.model.history.history
 
     def predict(self, path):
-        ''' predict on model path is folder of new images '''
-        #reshape img
+        ''' us model to predict on 1 image given that specific path '''
         test_image = image.load_img(path, target_size = (150,150,3))
         test_image = image.img_to_array(test_image)
         test_image = np.expand_dims(test_image, axis=0)
@@ -124,11 +118,11 @@ if __name__ == "__main__":
     #cnn = load_model(path)
     #cnn = CNN(model = cnn)
 
-    # #get images the model guessed incorrectly
-    # x, y = next(cnn.val_generator)
-    # difference = np.argmax(cnn.predict(x), axis = 1) != np.argmax(y, axis = 1)
-    # diff = x[difference]
-    # np.sum(diff)
-    # for d in diff:
-    #     img = (d * 255).astype(np.uint8)
-    #     PIL.Image.fromarray(img).show();
+    #get images the model guessed incorrectly
+    x, y = next(cnn.val_generator)
+    difference = np.argmax(cnn.predict(x), axis = 1) != np.argmax(y, axis = 1)
+    diff = x[difference]
+    np.sum(diff)
+    for d in diff:
+        img = (d * 255).astype(np.uint8)
+        PIL.Image.fromarray(img).show();
