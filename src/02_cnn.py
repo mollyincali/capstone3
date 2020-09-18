@@ -8,7 +8,8 @@ sns.set()
 import tensorflow as tf
 from tensorflow.keras import layers
 from keras.layers import Activation, Convolution2D, Dense, Dropout, Flatten, MaxPooling2D
-from keras.models import Sequential
+from keras.models import Sequential, load_model
+from keras.preprocessing import image 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import EarlyStopping
 import PIL 
@@ -47,7 +48,7 @@ class CNN():
 
         cnn.compile(optimizer='adam', 
                     loss ='categorical_crossentropy', 
-                    metrics ='accuracy')
+                    metrics =['accuracy', 'val_accuracy'])
         
         self.model = cnn
     
@@ -91,9 +92,9 @@ class CNN():
         ''' fit the cnn model with modelcheckpoint as a callback '''
 
         checkpoint = tf.keras.callbacks.ModelCheckpoint(
-            filepath = 'best_mod.hdf5',
-            save_weights_only = True,
-            monitor = 'val_acc',
+            filepath = 'best_mod2.hdf5',
+            save_best_only = True,
+            monitor = 'val_accuracy',
             mode = 'max')
 
         self.model.fit(self.train_generator,
@@ -103,61 +104,28 @@ class CNN():
 
         self.history = self.model.history.history
     
-    def predict(self, X):
-        ''' predict on model '''
-        return self.model.predict(X)
-
-    def load_weights(self, weights_path):
-        ''' load weights of previous model '''
-        self.model.load_weights(weights_path)
-        return self 
+    def predict(self, path):
+        ''' predict on model path is folder of new images '''
+        #reshape img
+        test_image = image.load_img(path, target_size = (150,150,3))
+        test_image = image.img_to_array(test_image)
+        test_image = np.expand_dims(test_image, axis=0)
+        return self.model.predict(test_image)
 
 if __name__ == "__main__":
     cnn = CNN()
     cnn.build_cnn((150,150,3),3) 
     cnn.create_img_gen((150,150),32)    
-    cnn.fit_cnn(1)     
+    cnn.fit_cnn(20)
 
-    #get images the model guessed incorrectly
-    x, y = next(cnn.val_generator)
-    difference = np.argmax(cnn.predict(x), axis = 1) != np.argmax(y, axis = 1)
-    diff = x[difference]
-    np.sum(diff)
-    for d in diff:
-        img = (d * 255).astype(np.uint8)
-        PIL.Image.fromarray(img).show();
+    #once we have the best model path
+    #cnn = load_model(path)
 
-'''
-def graph_model(history, epochs):
-    """ code to run accuracy on test and validation """
-    pink = '#CC9B89'
-    blue = '#23423F'
-    gold = '#B68D34'
-    epochs = 20
-
-    acc = history.history['accuracy'] 
-    val_acc = history.history['val_accuracy'] 
-    loss=history.history['loss'] 
-    val_loss=history.history['val_loss'] 
-    epochs_range = range(epochs)
-
-    plt.figure(figsize=(8, 8))
-    plt.subplot(1, 2, 1)
-    plt.plot(epochs_range, acc, label='Training Accuracy',
-            linewidth = 2, color = blue)
-    plt.plot(epochs_range, val_acc, label='Validation Accuracy',
-            linewidth = 2, color = pink)
-    plt.legend(loc='lower right')
-    plt.ylim((0.70,1))
-    plt.title('Training and Validation Accuracy')
-
-    plt.subplot(1, 2, 2)
-    plt.plot(epochs_range, loss, label='Training Loss',
-            linewidth = 2, color = blue)
-    plt.plot(epochs_range, val_loss, label='Validation Loss',
-            linewidth = 2, color = pink)
-    plt.legend(loc='upper right')
-    plt.title('Training and Validation Loss')
-    plt.show();
-'''
-
+    # #get images the model guessed incorrectly
+    # x, y = next(cnn.val_generator)
+    # difference = np.argmax(cnn.predict(x), axis = 1) != np.argmax(y, axis = 1)
+    # diff = x[difference]
+    # np.sum(diff)
+    # for d in diff:
+    #     img = (d * 255).astype(np.uint8)
+    #     PIL.Image.fromarray(img).show();
