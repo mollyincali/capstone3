@@ -4,20 +4,20 @@ import pandas as pd
 import tensorflow as tf
 from tensorflow.keras import layers
 from keras.layers import Conv2D, MaxPooling2D, UpSampling2D, Flatten, Reshape
-from keras.models import Sequential 
+from keras.models import Sequential, load_model
 from keras.preprocessing.image import ImageDataGenerator
 from keras import backend as K
 from sklearn.cluster import KMeans
 import graphing 
 
 class Autoencoder():
-    def __init__(self):
+    def __init__(self, model=None):
         ''' initializes the autoencoder model '''
-        self.build_autoencoder()
+        if model != None:
+            self.model = model
 
     def build_autoencoder(self):
         ''' build autoencoder model '''
-
         autoencoder = tf.keras.Sequential([
             # layers.Conv2D(128, (3, 3), activation = 'relu', padding = 'same', input_shape=(128, 128, 3)),
             # layers.MaxPooling2D((2,2), padding = 'same'),
@@ -52,7 +52,6 @@ class Autoencoder():
 
     def img_gen(self):
         ''' image generator used to reorganize images and pull in using flow from directory '''
-
         img_width, img_height = 128, 128
         train_data_dir = '../animals/train/w.wild'
         val_data_dir = '../animals/val/w.wild'
@@ -93,28 +92,24 @@ class Autoencoder():
             batch_size = how many images to feed the model
             epochs = how many rounds of epochs
         '''
+        checkpoint = tf.keras.callbacks.ModelCheckpoint(
+            filepath = 'bestauto.hdf5',
+            save_best_only = True,
+            monitor = 'loss',
+            mode = 'max')
 
         self.model.fit(train, 
                     epochs = epochs,
                     batch_size = batch_size,
-                    validation_data = test)
+                    validation_data = test,
+                    callbacks = [checkpoint])
+
         self.history = self.model.history.history
-
-    def save_weights(self, weights_path):
-        self.model.save_weights(weights_path)
-        return self
-
-    def load_weights(self, weights_path):
-        ''' load weights of previous model '''
-        self.model.load_weights(weights_path)
-        return self 
 
     def get_rmse(self, test):
         ''' calcuate the RMSE of the model after it is trained 
-
         input: test is array of images from validation generator
         '''
-
         return self.model.evaluate(test, test)
 
     def predict(self, X):
@@ -123,7 +118,6 @@ class Autoencoder():
         input: X is test array of images from validation generator
         output: reconstructed np.array of shape 128,128,3
         ''' 
-
         return self.model.predict(X)
     
     def get_flat_values(self, X): 
@@ -139,24 +133,27 @@ if __name__ == "__main__":
         auto = Autoencoder()
         auto.build_autoencoder()
         train, test = auto.img_gen()
-        auto.fit(train, test, 32, 3)
-        print("fit complete")
+        # use below to train model
+        # auto.fit(train, test, 32, 3)
 
-        #get img values after encoder half of autoencoder
-        # flat_values = auto.get_flat_values(train)
+        # use below to upload best model
+        auto = load_model("bestauto.hdf5")
+        auto = Autoencoder(model = auto)
 
-        # #cluster compressed images
-        # kmeans = KMeans(n_clusters = 4).fit(flat_values)
-        # k_labels = kmeans.labels_
-        # print("kmeans complete")
+        # get img values after encoder half of autoencoder
+        flat_values = auto.get_flat_values(train)
 
-        # #get group images
-        # d = {'cluster': k_labels, 'file_path': auto.train.filenames}
-        # df = pd.DataFrame(data=d)
-        # cluster_images(df)
+        # cluster compressed images
+        kmeans = KMeans(n_clusters = 5).fit(flat_values)
+        k_labels = kmeans.labels_
+        print("kmeans complete")
 
-        #code for before and after
-        x, y = next(auto.train)
+        # get group images
+        d = {'cluster': k_labels, 'file_path': train.filenames}
+        df = pd.DataFrame(data=d)
+        cluster_images(df)
+
+        # code for before and after
+        x, y = next(train)
         decoded = auto.predict(x)
-
         get_before_after(x, decoded)

@@ -1,5 +1,4 @@
 ''' class for CNN model '''
-
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -12,6 +11,7 @@ from keras.models import Sequential, load_model
 from keras.preprocessing import image 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import EarlyStopping
+import graphing
 
 class CNN():
     def __init__(self, model=None):
@@ -112,11 +112,11 @@ if __name__ == "__main__":
     cnn = CNN()
     cnn.build_cnn((150,150,3),3) 
     cnn.create_img_gen((150,150),32)    
-    cnn.fit_cnn(20)
+    # cnn.fit_cnn(20)
 
     #once we have the best model path
-    #cnn = load_model(path)
-    #cnn = CNN(model = cnn)
+    cnn = load_model('best_mod3.hdf5')
+    cnn = CNN(model = cnn)
 
     #get images the model guessed incorrectly
     x, y = next(cnn.val_generator)
