@@ -8,7 +8,7 @@ from keras.models import Sequential, load_model
 from keras.preprocessing.image import ImageDataGenerator
 from keras import backend as K
 from sklearn.cluster import KMeans
-import graphing 
+from graphing import *
 
 class Autoencoder():
     def __init__(self, model=None):
@@ -137,7 +137,7 @@ if __name__ == "__main__":
         # auto.fit(train, test, 32, 3)
 
         # use below to upload best model
-        auto = load_model("bestauto.hdf5")
+        auto = load_model("bestauto2.hdf5")
         auto = Autoencoder(model = auto)
 
         # get img values after encoder half of autoencoder
