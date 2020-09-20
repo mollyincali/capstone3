@@ -19,26 +19,16 @@ class Autoencoder():
     def build_autoencoder(self):
         ''' build autoencoder model '''
         autoencoder = tf.keras.Sequential([
-            # layers.Conv2D(128, (3, 3), activation = 'relu', padding = 'same', input_shape=(128, 128, 3)),
-            # layers.MaxPooling2D((2,2), padding = 'same'),
-            # layers.Conv2D(64, (3, 3), activation = 'relu', padding = 'same'),
-            # layers.MaxPooling2D((2,2), padding = 'same'),
             layers.Conv2D(64, (3, 3), activation = 'relu', padding = 'same', input_shape=(128, 128, 3)),
             layers.MaxPooling2D((2,2), padding = 'same'),
             layers.Conv2D(8, (3, 3), activation = 'relu', padding = 'same'), 
-            # layers.MaxPooling2D((2,2), padding = 'same'),
             
-            layers.Flatten(), #num = last conv2d numbers * each other so 8 * 3 * 3
-            layers.Reshape((64, 64, 8)), #reshape to what was in last conv2d layer so 
+            layers.Flatten(),
+            layers.Reshape((64, 64, 8)), 
 
             layers.Conv2D(8, (3, 3), activation = 'relu', padding = 'same'),
             layers.UpSampling2D((2,2)),
             layers.Conv2D(32, (3, 3), activation = 'relu', padding = 'same'),
-            # layers.UpSampling2D((2,2)),
-            # layers.Conv2D(64, (3, 3), activation = 'relu', padding = 'same'),
-            # layers.UpSampling2D((2,2)),
-            # layers.Conv2D(128, (3, 3), activation = 'relu', padding = 'same'),
-            # layers.UpSampling2D((2,2)),
             layers.Conv2D(3, (3,3), activation = 'sigmoid', padding = 'same')
             ])
         
@@ -69,14 +59,14 @@ class Autoencoder():
                 train_data_dir,
                 target_size=(img_width, img_height),
                 batch_size=batch_size,
-                seed=3,
+                shuffle = False,
                 class_mode='input')
         
         val_generator = val_datagen.flow_from_directory(
                 val_data_dir,
                 target_size=(img_width, img_height),
                 batch_size = batch_size,
-                seed=3,
+                shuffle=False,
                 class_mode = 'input')
 
         self.train = train_generator
@@ -129,7 +119,7 @@ class Autoencoder():
         return flat_values
 
 if __name__ == "__main__":
-        #build and train 
+        # build and train 
         auto = Autoencoder()
         auto.build_autoencoder()
         train, test = auto.img_gen()
@@ -137,7 +127,7 @@ if __name__ == "__main__":
         # auto.fit(train, test, 32, 3)
 
         # use below to upload best model
-        auto = load_model("bestauto2.hdf5")
+        auto = load_model("bestauto.hdf5")
         auto = Autoencoder(model = auto)
 
         # get img values after encoder half of autoencoder
