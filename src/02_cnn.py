@@ -115,14 +115,14 @@ if __name__ == "__main__":
     # cnn.fit_cnn(20)
 
     #once we have the best model path
-    cnn = load_model('best_mod3.hdf5')
+    cnn = load_model('../best_mod3.hdf5')
     cnn = CNN(model = cnn)
 
     #get images the model guessed incorrectly
-    x, y = next(cnn.val_generator)
-    difference = np.argmax(cnn.predict(x), axis = 1) != np.argmax(y, axis = 1)
-    diff = x[difference]
-    np.sum(diff)
-    for d in diff:
-        img = (d * 255).astype(np.uint8)
-        PIL.Image.fromarray(img).show();
+    # x, y = next(cnn.val_generator)
+    # difference = np.argmax(cnn.predict(x), axis = 1) != np.argmax(y, axis = 1)
+    # diff = x[difference]
+    # np.sum(diff)
+    # for d in diff:
+    #     img = (d * 255).astype(np.uint8)
+    #     PIL.Image.fromarray(img).show();
