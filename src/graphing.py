@@ -73,8 +73,5 @@ def graph_model(history, epochs):
     plt.title('Training and Validation Loss')
     plt.show()
 
-def bar_chart():
-    pass
-
 if __name__ == "__main__":
     pass 

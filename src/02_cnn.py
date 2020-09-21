@@ -101,7 +101,11 @@ class CNN():
 
         self.history = self.model.history.history
 
-    def predict(self, path):
+    def predict(self, X):
+        ''' use to predict on batch of image data gen '''
+        return self.model.predict(X)
+
+    def predict_one_img(self, path):
         ''' us model to predict on 1 image given that specific path '''
         test_image = image.load_img(path, target_size = (150,150,3))
         test_image = image.img_to_array(test_image)
@@ -119,10 +123,10 @@ if __name__ == "__main__":
     cnn = CNN(model = cnn)
 
     #get images the model guessed incorrectly
-    # x, y = next(cnn.val_generator)
-    # difference = np.argmax(cnn.predict(x), axis = 1) != np.argmax(y, axis = 1)
-    # diff = x[difference]
-    # np.sum(diff)
-    # for d in diff:
-    #     img = (d * 255).astype(np.uint8)
-    #     PIL.Image.fromarray(img).show();
+    x, y = next(cnn.val_generator)
+    difference = np.argmax(cnn.predict(x), axis = 1) != np.argmax(y, axis = 1)
+    diff = x[difference]
+    np.sum(diff)
+    for d in diff:
+        img = (d * 255).astype(np.uint8)
+        PIL.Image.fromarray(img).show();
