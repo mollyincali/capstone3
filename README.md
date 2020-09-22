@@ -9,7 +9,7 @@ A Convolution Neural Network was created to classify each image. To process the 
 
 The best performing CNN was made with two convolution 2D layers back to back, followed by a max-pooling layer, a flatten layer then a dense layer. Dropout was added in two different locations to regularize my images.
 
-![image](images/cnnarch.png)
+![image](images/terminalcnn.png)
 ![image](images/cnnresults.png)
 
 Even with the high performance of my model, there were some times it guessed incorrectly.
@@ -23,10 +23,8 @@ I removed some max-pooling layers and was able to get much better results in the
 ![image](images/notblur.png)
 
 
-Once my model was trained I rebuild the encoder half of the model to extract the small dimensional space of my images - a flattened array of 32768 features instead of the original image of (512, 512, 3). With this smaller dimensional representation of my image, I attempted KMeans clustering to group similar images together.
+Once my model was trained I rebuild the encoder half of the model to extract the small dimensional space of my images - a flattened array of 32768 features instead of the original image of (512, 512, 3). With this smaller dimensional representation of my image, I attempted KMeans clustering to group similar images together. I was expecting to see the same animal in each group, but my encoder seems to be grouping images with a similar color tone. Not the acutal animal in the image.
 ![image](images/autofail.png)
-
-I was expecting to see the same animal in each group, but my encoder seems to be grouping images with a similar color tone. Not the acutal animal in the image.
 
 ## Xception CNN
 My next and final attempt at clustering my unlabeled images was to use a pre-trained Convolutional Neural Network called Xception. Xception is a deep learning model that has been made available alongside pre-trained weights and has 1000 prediction classes. This model can take in an image and will produce a probability that it belongs to each of its 1000 classes. My hope is that this model will be able to predict the animal in my image utilizing the loaded weights of “imagenet.” Once I had the prediction of each image in my wild folder, I then used KMeans cluster to group similar predictions together. Determining the best number of clusters can be tricky, so I plotted the distortion against the number of clusters and looked for the elbow of the plot. 

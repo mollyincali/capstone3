@@ -11,12 +11,15 @@ from keras.models import Sequential, load_model
 from keras.preprocessing import image 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import EarlyStopping
+from sklearn.metrics import confusion_matrix
 import graphing
 
 class CNN():
     def __init__(self, model=None):
         ''' initializes the CNN model '''
         if model != None:
+            self.model = model
+        else:
             self.model = model
 
     def build_cnn(self, input_size, n_categories):
@@ -80,7 +83,8 @@ class CNN():
         val_generator = val_datagen.flow_from_directory(
             val_data_dir,
             target_size=img_size,
-            batch_size = batch_size,
+            batch_size = 1500,
+            shuffle = False,
             class_mode = 'categorical')
 
         self.train_generator = train_generator
@@ -88,6 +92,7 @@ class CNN():
 
     def fit_cnn(self, epoch):
         ''' fit the cnn model with modelcheckpoint as a callback '''
+        
         checkpoint = tf.keras.callbacks.ModelCheckpoint(
             filepath = 'best_mod3.hdf5',
             save_best_only = True,
@@ -113,16 +118,18 @@ class CNN():
         return self.model.predict(test_image)
 
 if __name__ == "__main__":
-    cnn = CNN()
-    cnn.build_cnn((150,150,3),3) 
-    cnn.create_img_gen((150,150),32)    
+    # only use below to fit model
+    # cnn = CNN()
+    # cnn.build_cnn((150,150,3), 3) 
+    # cnn.create_img_gen((150,150), 32)    
     # cnn.fit_cnn(20)
 
-    #once we have the best model path
-    cnn = load_model('../best_mod3.hdf5')
+    # #once we have the best model path
+    cnn = load_model('best_mod3.hdf5')
     cnn = CNN(model = cnn)
+    cnn.create_img_gen((150,150), 32)  
 
-    #get images the model guessed incorrectly
+    # get images the model guessed incorrectly
     x, y = next(cnn.val_generator)
     difference = np.argmax(cnn.predict(x), axis = 1) != np.argmax(y, axis = 1)
     diff = x[difference]
@@ -130,3 +137,8 @@ if __name__ == "__main__":
     for d in diff:
         img = (d * 255).astype(np.uint8)
         PIL.Image.fromarray(img).show();
+
+    #get confusion matrix
+    true = cnn.val_generator.classes
+    pred = np.argmax(cnn.predict(cnn.val_generator), axis = 1)
+    confusion_matrix(true, pred)

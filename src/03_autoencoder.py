@@ -8,6 +8,7 @@ from keras.models import Sequential, load_model
 from keras.preprocessing.image import ImageDataGenerator
 from keras import backend as K
 from sklearn.cluster import KMeans
+from sklearn.metrics.pairwise import cosine_similarity
 from graphing import *
 
 class Autoencoder():
@@ -122,16 +123,17 @@ if __name__ == "__main__":
         # build and train 
         auto = Autoencoder()
         auto.build_autoencoder()
-        train, test = auto.img_gen()
-        # use below to train model
-        # auto.fit(train, test, 32, 3)
+        auto.img_gen()
+        use below to train model
+        auto.fit(train, test, 32, 3)
 
         # use below to upload best model
         auto = load_model("bestauto.hdf5")
         auto = Autoencoder(model = auto)
+        auto.img_gen()
 
         # get img values after encoder half of autoencoder
-        flat_values = auto.get_flat_values(train)
+        flat_values = auto.get_flat_values(test)
 
         # cluster compressed images
         kmeans = KMeans(n_clusters = 5).fit(flat_values)
@@ -139,7 +141,7 @@ if __name__ == "__main__":
         print("kmeans complete")
 
         # get group images
-        d = {'cluster': k_labels, 'file_path': train.filenames}
+        d = {'cluster': kmeans.labels_, 'file_path': test.filenames}
         df = pd.DataFrame(data=d)
         cluster_images(df)
 
