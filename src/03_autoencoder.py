@@ -8,7 +8,6 @@ from keras.models import Sequential, load_model
 from keras.preprocessing.image import ImageDataGenerator
 from keras import backend as K
 from sklearn.cluster import KMeans
-from sklearn.metrics.pairwise import cosine_similarity
 from graphing import *
 
 class Autoencoder():
@@ -44,8 +43,8 @@ class Autoencoder():
     def img_gen(self):
         ''' image generator used to reorganize images and pull in using flow from directory '''
         img_width, img_height = 128, 128
-        train_data_dir = '../animals/train/w.wild'
-        val_data_dir = '../animals/val/w.wild'
+        train_data_dir = '../oganimals/train/w.wild'
+        val_data_dir = '../oganimals/val/w.wild'
         batch_size = 32
 
         train_datagen = ImageDataGenerator(
@@ -66,7 +65,7 @@ class Autoencoder():
         val_generator = val_datagen.flow_from_directory(
                 val_data_dir,
                 target_size=(img_width, img_height),
-                batch_size = batch_size,
+                batch_size = 1500,
                 shuffle=False,
                 class_mode = 'input')
 
@@ -121,11 +120,10 @@ class Autoencoder():
 
 if __name__ == "__main__":
         # build and train 
-        auto = Autoencoder()
-        auto.build_autoencoder()
-        auto.img_gen()
-        use below to train model
-        auto.fit(train, test, 32, 3)
+        # auto = Autoencoder()
+        # auto.build_autoencoder()
+        # auto.img_gen()
+        # auto.fit(train, test, 32, 3)
 
         # use below to upload best model
         auto = load_model("bestauto.hdf5")
@@ -133,7 +131,7 @@ if __name__ == "__main__":
         auto.img_gen()
 
         # get img values after encoder half of autoencoder
-        flat_values = auto.get_flat_values(test)
+        flat_values = auto.get_flat_values(auto.test)
 
         # cluster compressed images
         kmeans = KMeans(n_clusters = 5).fit(flat_values)
@@ -141,11 +139,47 @@ if __name__ == "__main__":
         print("kmeans complete")
 
         # get group images
-        d = {'cluster': kmeans.labels_, 'file_path': test.filenames}
+        d = {'cluster': kmeans.labels_, 'file_path': auto.test.filenames}
         df = pd.DataFrame(data=d)
         cluster_images(df)
 
         # code for before and after
-        x, y = next(train)
+        x, y = next(auto.train)
         decoded = auto.predict(x)
         get_before_after(x, decoded)
+
+        fox = flat_values[4]
+        cheeta = flat_values[40]
+        defnotfox = flat_values[404]
+
+        fox = fox[(fox != 0)] #25034
+        cheeta = cheeta[(cheeta != 0)] #24718
+        defnotfox = defnotfox[(defnotfox != 0)] #26087
+
+        plt.hist(fox, bins = 150, alpha = 0.3, label = 'Fox')
+        plt.hist(cheeta, bins = 150, alpha = 0.6, label = 'Tiger 93% Similar')
+        # plt.hist(fox, bins = 125, alpha = 0.5, label = 'Fox')
+        # plt.hist(defnotfox, bins = 150, alpha = 0.5, label = "Tiger 76% Similar")
+        plt.title('Histogram of pixel intensities')
+        plt.xlabel('Pixel intensity')
+        plt.ylabel('Count')
+        plt.legend()
+        plt.show()
+
+        fox = fox[(fox != 0)] #25034
+        cheeta = cheeta[(cheeta != 0)] #24718
+        defnotfox = defnotfox[(defnotfox != 0)] #26087
+
+        cheeta = flat_values[40].reshape(64,64,8)
+        fox = flat_values[4].reshape(64,64,8)
+        plt.figure(figsize=(16, 10))
+        for i in range(8):
+            # display original
+            ax = plt.subplot(1, 8, i + 1)
+            plt.imshow(fox2[i])
+            ax.get_xaxis().set_visible(False)
+            ax.get_yaxis().set_visible(False)
+        plt.show()
+
+        plt.imshow(fox1[1])
+        plt.show()

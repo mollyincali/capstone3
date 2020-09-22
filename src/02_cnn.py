@@ -138,7 +138,7 @@ if __name__ == "__main__":
         img = (d * 255).astype(np.uint8)
         PIL.Image.fromarray(img).show();
 
-    #get confusion matrix
+    #call heatmap function
     true = cnn.val_generator.classes
     pred = np.argmax(cnn.predict(cnn.val_generator), axis = 1)
-    confusion_matrix(true, pred)
+    heatmap(true, pred)

@@ -13,7 +13,7 @@ def cluster_images(df):
         group = df[df['cluster'] == i].copy()
         plt.figure(figsize=(10, 10))
         for idx, img in enumerate(group.sample(9).iloc[:,1]):
-            animal = io.imread(f'../animals/train/w.wild/{img}')
+            animal = io.imread(f'../oganimals/val/w.wild/{img}')
             ax = plt.subplot(3, 3, idx + 1)
             plt.imshow(animal)
             plt.axis("off")
@@ -72,6 +72,23 @@ def graph_model(history, epochs):
     plt.legend(loc='upper right')
     plt.title('Training and Validation Loss')
     plt.show()
+
+def heatmap(true, pred):  
+    ''' creates heatmap of true and predicited animals '''
+    cm = confusion_matrix(true, pred)
+    group_names = ['True Cat',' ',' ',
+                    ' ','True Dog',' ',
+                    ' ',' ','True Wild']
+    group_counts = ['{0:0.0f}'.format(value) for value in
+                cm.flatten()]
+    group_percentages = ['{0:.2%}'.format(value) for value in
+                     cm.flatten()/np.sum(cm)]
+    labels = [f'{v1}\n{v2}\n{v3}' for v1, v2, v3 in
+          zip(group_names,group_counts,group_percentages)]
+    labels = np.asarray(labels).reshape(3,3)
+    sns.heatmap(cm, annot=labels, fmt='', cmap='Blues', 
+                xticklabels=['Cat','Dog','Wild'], yticklabels=['Cat','Dog','Wild'])
+    plt.show();
 
 if __name__ == "__main__":
     pass 
