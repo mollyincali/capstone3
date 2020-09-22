@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 sns.set()
 from skimage import io
 import PIL 
+from sklearn.metrics import confusion_matrix
 
 def cluster_images(df):
     ''' show kmeans cluster of animals '''
@@ -89,6 +90,26 @@ def heatmap(true, pred):
     sns.heatmap(cm, annot=labels, fmt='', cmap='Blues', 
                 xticklabels=['Cat','Dog','Wild'], yticklabels=['Cat','Dog','Wild'])
     plt.show();
+
+def pixel_hist(animal1, animal2, label1, label2)
+    plt.hist(animal1, bins = 150, alpha = 0.3, label = label1)
+    plt.hist(animal2, bins = 150, alpha = 0.6, label = label2)
+    plt.title('Histogram of pixel intensities')
+    plt.xlabel('Pixel intensity')
+    plt.ylabel('Count')
+    plt.legend()
+    plt.show()
+
+def latent_features(animalnum)
+    animal = flat_values[animalnum].reshape(64,64,8)
+    plt.figure(figsize=(16, 10))
+    for i in range(8):
+        # display original
+        ax = plt.subplot(1, 8, i + 1)
+        plt.imshow(animal[i])
+        ax.get_xaxis().set_visible(False)
+        ax.get_yaxis().set_visible(False)
+    plt.show()
 
 if __name__ == "__main__":
     pass 
