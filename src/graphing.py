@@ -91,7 +91,16 @@ def heatmap(true, pred):
                 xticklabels=['Cat','Dog','Wild'], yticklabels=['Cat','Dog','Wild'])
     plt.show();
 
+def hist_prep(animalidx):
+    ''' takes in the index of the particular animal 
+    we are hoping to graph on a histogram '''
+    animal = flat_values[animalidx]
+    animal = animal[(animal != 0)] 
+    return animal
+
 def pixel_hist(animal1, animal2, label1, label2)
+    '''  graphs the pixel intensity of the
+    latent features for two animals one 1 graph '''
     plt.hist(animal1, bins = 150, alpha = 0.3, label = label1)
     plt.hist(animal2, bins = 150, alpha = 0.6, label = label2)
     plt.title('Histogram of pixel intensities')
@@ -100,7 +109,8 @@ def pixel_hist(animal1, animal2, label1, label2)
     plt.legend()
     plt.show()
 
-def latent_features(animalnum)
+def latent_features(animalidx)
+    '''  graphs the latent features for a particular animal '''
     animal = flat_values[animalnum].reshape(64,64,8)
     plt.figure(figsize=(16, 10))
     for i in range(8):

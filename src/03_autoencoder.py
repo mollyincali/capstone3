@@ -120,15 +120,14 @@ class Autoencoder():
 
 if __name__ == "__main__":
         # build and train 
-        # auto = Autoencoder()
-        # auto.build_autoencoder()
-        # auto.img_gen()
-        # auto.fit(train, test, 32, 3)
+        auto = Autoencoder()
+        auto.build_autoencoder()
+        auto.img_gen()
+        auto.fit(train, test, 32, 3)
 
         # use below to upload best model
         auto = load_model("bestauto.hdf5")
         auto = Autoencoder(model = auto)
-        auto.img_gen()
 
         # get img values after encoder half of autoencoder
         flat_values = auto.get_flat_values(auto.test)
@@ -148,38 +147,10 @@ if __name__ == "__main__":
         decoded = auto.predict(x)
         get_before_after(x, decoded)
 
-        fox = flat_values[4]
-        cheeta = flat_values[40]
-        defnotfox = flat_values[404]
+        latent_features(40) #gets cheeta
+        latent_features(4) #gets original fox
+        latent_features(9) #gets second fox
 
-        fox = fox[(fox != 0)] #25034
-        cheeta = cheeta[(cheeta != 0)] #24718
-        defnotfox = defnotfox[(defnotfox != 0)] #26087
-
-        plt.hist(fox, bins = 150, alpha = 0.3, label = 'Fox')
-        plt.hist(cheeta, bins = 150, alpha = 0.6, label = 'Tiger 93% Similar')
-        # plt.hist(fox, bins = 125, alpha = 0.5, label = 'Fox')
-        # plt.hist(defnotfox, bins = 150, alpha = 0.5, label = "Tiger 76% Similar")
-        plt.title('Histogram of pixel intensities')
-        plt.xlabel('Pixel intensity')
-        plt.ylabel('Count')
-        plt.legend()
-        plt.show()
-
-        fox = fox[(fox != 0)] #25034
-        cheeta = cheeta[(cheeta != 0)] #24718
-        defnotfox = defnotfox[(defnotfox != 0)] #26087
-
-        cheeta = flat_values[40].reshape(64,64,8)
-        fox = flat_values[4].reshape(64,64,8)
-        plt.figure(figsize=(16, 10))
-        for i in range(8):
-            # display original
-            ax = plt.subplot(1, 8, i + 1)
-            plt.imshow(fox2[i])
-            ax.get_xaxis().set_visible(False)
-            ax.get_yaxis().set_visible(False)
-        plt.show()
-
-        plt.imshow(fox1[1])
-        plt.show()
+        fox = hist_prep(4)
+        cheeta = hist_prep(40)
+        pixel_hist(fox, cheeta, 'Fox', 'Cheeta')

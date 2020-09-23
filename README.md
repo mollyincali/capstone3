@@ -12,16 +12,9 @@ The best performing CNN was made with two convolution 2D layers back to back, fo
 ![image](images/terminalcnn.png)
 ![image](images/cnnresults.png)
 
-Even with the high performance of my model, there were some times it guessed incorrectly.
-![image](images/cnnwrong.png)
-
 ## Autoencoder CNN
-Once I had a strong model that could classify images into those three categories I wanted to better understand the types of animals I had in my wild folder using unsupervised learning. I first attempted to understand these images by building an autoencoder CNN. The goal here was to train an autoencoder to encode an image down to a small dimensional space, then rebuild the image back up. My first few autoencoders were reconstructing blurry images.
-![image](images/blur.png)
-
-I removed some max-pooling layers and was able to get much better results in the reconstructed images.
+Once I had a strong model that could classify images into those three categories I wanted to better understand the types of animals I had in my wild folder using unsupervised learning. I first attempted to understand these images by building an autoencoder CNN. The goal here was to train an autoencoder to encode an image down to a small dimensional space, then rebuild the image back up. My first few autoencoders were reconstructing blurry images. I removed some max-pooling layers and was able to get much better results in the reconstructed images.
 ![image](images/notblur.png)
-
 
 Once my model was trained I rebuild the encoder half of the model to extract the small dimensional space of my images - a flattened array of 32768 features instead of the original image of (512, 512, 3). With this smaller dimensional representation of my image, I attempted KMeans clustering to group similar images together. I was expecting to see the same animal in each group, but my encoder seems to be grouping images with a similar color tone. Not the acutal animal in the image.
 ![image](images/autofail.png)
