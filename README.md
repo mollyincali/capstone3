@@ -9,7 +9,6 @@ A Convolution Neural Network was created to classify each image. To process the 
 
 The best performing CNN was made with two convolution 2D layers back to back, followed by a max-pooling layer, a flatten layer then a dense layer. Dropout was added in two different locations to regularize my images.
 
-![image](images/terminalcnn.png)
 ![image](images/cnnresults.png)
 
 ## Autoencoder CNN

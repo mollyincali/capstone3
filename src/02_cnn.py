@@ -12,7 +12,7 @@ from keras.preprocessing import image
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import EarlyStopping
 from sklearn.metrics import confusion_matrix
-import graphing
+from graphing import *
 
 class CNN():
     def __init__(self, model=None):

@@ -14,7 +14,7 @@ def cluster_images(df):
         group = df[df['cluster'] == i].copy()
         plt.figure(figsize=(10, 10))
         for idx, img in enumerate(group.sample(9).iloc[:,1]):
-            animal = io.imread(f'../oganimals/val/w.wild/{img}')
+            animal = io.imread(f'../animals/val/w.wild/{img}')
             ax = plt.subplot(3, 3, idx + 1)
             plt.imshow(animal)
             plt.axis("off")
@@ -98,7 +98,7 @@ def hist_prep(animalidx):
     animal = animal[(animal != 0)] 
     return animal
 
-def pixel_hist(animal1, animal2, label1, label2)
+def pixel_hist(animal1, animal2, label1, label2):
     '''  graphs the pixel intensity of the
     latent features for two animals one 1 graph '''
     plt.hist(animal1, bins = 150, alpha = 0.3, label = label1)
@@ -109,7 +109,7 @@ def pixel_hist(animal1, animal2, label1, label2)
     plt.legend()
     plt.show()
 
-def latent_features(animalidx)
+def latent_features(animalidx):
     '''  graphs the latent features for a particular animal '''
     animal = flat_values[animalnum].reshape(64,64,8)
     plt.figure(figsize=(16, 10))
